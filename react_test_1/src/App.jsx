@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import { SearchBar } from './components/SearchBar';
+import { NotesForm } from './NotesForm';
+import { NotesData } from './components/NotesData';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [isShowed, setIsShowed] = useState(false);
+  const [totalNotes, setTotalNotes] = useState(0);
+  const [showing, setShowing] = useState(0);
+  const[searchKey,setSearchKey]=useState("")
 
+  function showedHandler() {
+    setIsShowed((prev) => !prev);
+  }
+
+  function HandleAddNotes() {
+    showedHandler();
+  }
+ function handleOnSearch(data){
+  setSearchKey(data);
+
+ }
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-6">
+      <div className="w-full max-w-lg">
+        <SearchBar onSearch={handleOnSearch} />
+
+        <div className="mt-4 text-center">
+          <p className="text-lg font-semibold">Total Notes: {totalNotes}</p>
+          <p className="text-lg font-semibold">Showing: {showing}</p>
+        </div>
+
+        <button 
+          className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-md py-2 px-4 transition"
+          onClick={HandleAddNotes}
+        >
+          Add Notes
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <NotesData searchKey={searchKey}/>
+
+      {isShowed && <NotesForm onClose={showedHandler} />}
+    </div>
+  );
 }
 
-export default App
+export default App;
